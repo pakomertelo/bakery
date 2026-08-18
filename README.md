@@ -21,7 +21,7 @@ cp .env.example .env.local
 
 Copia de `supabase:status` a `.env.local` la API URL, anon key y, solo para el script local, service role. Nunca uses la service role como `VITE_*`.
 
-Reconstruye desde migraciones y carga automáticamente `supabase/seed.sql`:
+Reconstruye la base desde migraciones, carga automáticamente `supabase/seed.sql` y aplica después la configuración declarativa de buckets:
 
 ```bash
 npm run supabase:reset
@@ -29,6 +29,8 @@ npm run supabase:types
 npm run supabase:test
 npm run supabase:lint
 ```
+
+`npm run supabase:reset` encadena `supabase db reset` y `supabase seed buckets`. Este último materializa los buckets definidos en `supabase/config.toml`; no hace falta crearlos desde Studio. También puede ejecutarse aisladamente con `npm run supabase:buckets`.
 
 Regenera `src/types/database.types.ts` después de cualquier cambio de esquema. Para arrancar Vite:
 
@@ -40,30 +42,32 @@ Frontend y API se sirven normalmente en `http://localhost:5173` y `http://127.0.
 
 ## Auth y administrador local
 
-El signup general y por email están deshabilitados. Crea un administrador real solo contra Supabase local:
+El signup general y por email están deshabilitados. La opción recomendada evita escribir la contraseña en el historial del shell: completa `LOCAL_ADMIN_EMAIL` y `LOCAL_ADMIN_PASSWORD` en el `.env.local` ignorado y ejecuta:
 
 ```bash
-npm run admin:create-local -- admin@example.invalid 'contraseña-local-elegida'
+npm run admin:create-local
 ```
 
-El comando lee `.env.local`, requiere `SUPABASE_SERVICE_ROLE_KEY` y `SUPABASE_URL` (o `VITE_SUPABASE_URL`), confirma el email y crea/activa `admin_profiles`. Abortará ante una URL que no sea localhost/127.0.0.1. No se versiona ninguna contraseña.
+El comando lee `.env.local`, requiere `SUPABASE_SERVICE_ROLE_KEY` y `SUPABASE_URL` (o `VITE_SUPABASE_URL`), confirma el email y crea/activa `admin_profiles`. Abortará ante una URL que no sea localhost/127.0.0.1. Los argumentos `-- <email> <password>` siguen disponibles como alternativa local, pero pueden quedar en el historial y no son la vía recomendada.
 
 ## Base de datos y Storage
 
-Las migraciones versionadas en `supabase/migrations` son la única fuente de verdad. El seed contiene settings, catálogo, 14 alérgenos, disponibilidad y un pedido completamente ficticios. La generación concurrente definitiva de referencias humanas queda para la Edge Function de la Fase 3; no se usa `count(*) + 1`.
+Las migraciones versionadas en `supabase/migrations` son la única fuente de verdad del esquema y las políticas; la configuración declarativa de Storage vive en `supabase/config.toml`. El seed contiene settings, catálogo, 14 alérgenos, disponibilidad y un pedido completamente ficticios. La generación concurrente definitiva de referencias humanas queda para la Edge Function de la Fase 3; no se usa `count(*) + 1`.
+
+En un entorno sin seed DEMO, un admin activo puede insertar la única fila de `site_settings`; la PK booleana con `CHECK (id)` mantiene el singleton. Después solo se actualiza: no existe DELETE de cliente. Productos y categorías tampoco conceden DELETE físico; la administración futura usará `active`, `published` y `archived_at`.
 
 `catalog-public` sirve imágenes públicas, pero solo admins escriben. `order-references-private` es privado y durante esta fase solo admins acceden. Ambos limitan JPEG/PNG/WebP a 8 MiB. Consulta [la arquitectura](docs/ARCHITECTURE.md) y [el modelo de seguridad](docs/SECURITY.md).
 
 ## Variables
 
-| Variable                                    | Exposición                  | Uso                                  |
-| ------------------------------------------- | --------------------------- | ------------------------------------ |
-| `VITE_SUPABASE_URL`                         | Pública                     | API de Supabase local.               |
-| `VITE_SUPABASE_ANON_KEY`                    | Pública                     | Anon key protegida por RLS.          |
-| `VITE_SITE_URL`                             | Pública                     | URL del frontend.                    |
-| `SUPABASE_URL`                              | Privada local               | URL alternativa para crear admin.    |
-| `SUPABASE_SERVICE_ROLE_KEY`                 | Secreto local/backend       | Solo script Admin API local.         |
-| `LOCAL_ADMIN_EMAIL`, `LOCAL_ADMIN_PASSWORD` | Secretos locales opcionales | Alternativa a argumentos del script. |
+| Variable                                    | Exposición            | Uso                                  |
+| ------------------------------------------- | --------------------- | ------------------------------------ |
+| `VITE_SUPABASE_URL`                         | Pública               | API de Supabase local.               |
+| `VITE_SUPABASE_ANON_KEY`                    | Pública               | Anon key protegida por RLS.          |
+| `VITE_SITE_URL`                             | Pública               | URL del frontend.                    |
+| `SUPABASE_URL`                              | Privada local         | URL alternativa para crear admin.    |
+| `SUPABASE_SERVICE_ROLE_KEY`                 | Secreto local/backend | Solo script Admin API local.         |
+| `LOCAL_ADMIN_EMAIL`, `LOCAL_ADMIN_PASSWORD` | Secretos locales      | Vía recomendada para crear el admin. |
 
 Las demás variables privadas de `.env.example` están reservadas para fases posteriores y aún no se usan.
 
@@ -78,9 +82,10 @@ Las demás variables privadas de `.env.example` están reservadas para fases pos
 | `npm run format:check`                                         | Comprueba Prettier.                 |
 | `npm run supabase:start` / `supabase:stop` / `supabase:status` | Ciclo de servicios local.           |
 | `npm run supabase:reset`                                       | Reconstruye migraciones y seed.     |
+| `npm run supabase:buckets`                                     | Aplica buckets declarativos.        |
 | `npm run supabase:types`                                       | Regenera tipos desde la base local. |
 | `npm run supabase:test`                                        | Ejecuta pgTAP.                      |
 | `npm run supabase:lint`                                        | Lint de PostgreSQL local.           |
-| `npm run admin:create-local -- <email> <password>`             | Crea/actualiza admin local.         |
+| `npm run admin:create-local`                                   | Crea/actualiza admin local.         |
 
 No hay proyecto remoto, staging, producción, Edge Functions públicas ni UI administrativa funcional en esta fase.

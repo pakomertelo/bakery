@@ -34,21 +34,21 @@ revoke all on all tables in schema public from anon, authenticated;
 grant select on public.site_settings, public.categories, public.products, public.product_images, public.product_variants, public.flavours, public.product_flavours, public.allergens, public.product_allergens to anon, authenticated;
 grant select on public.admin_profiles to authenticated;
 grant select, insert, update on public.orders to authenticated;
-grant select, insert, update, delete on public.site_settings, public.categories, public.products, public.product_images, public.product_variants, public.flavours, public.product_flavours, public.allergens, public.product_allergens, public.availability_blocks, public.order_items, public.custom_order_details, public.order_reference_images to authenticated;
+grant select, insert, update on public.site_settings, public.categories, public.products to authenticated;
+grant select, insert, update, delete on public.product_images, public.product_variants, public.flavours, public.product_flavours, public.allergens, public.product_allergens, public.availability_blocks, public.order_items, public.custom_order_details, public.order_reference_images to authenticated;
 grant select on public.order_status_history, public.email_events to authenticated;
 
 create policy "public reads singleton settings" on public.site_settings for select to anon, authenticated using (true);
+create policy "admins initialize settings" on public.site_settings for insert to authenticated with check (public.is_admin());
 create policy "admins update settings" on public.site_settings for update to authenticated using (public.is_admin()) with check (public.is_admin());
 create policy "public reads active categories" on public.categories for select to anon, authenticated using (active and archived_at is null);
 create policy "admins read all categories" on public.categories for select to authenticated using (public.is_admin());
 create policy "admins insert categories" on public.categories for insert to authenticated with check (public.is_admin());
 create policy "admins update categories" on public.categories for update to authenticated using (public.is_admin()) with check (public.is_admin());
-create policy "admins delete categories" on public.categories for delete to authenticated using (public.is_admin());
 create policy "public reads published products" on public.products for select to anon, authenticated using (published and active and archived_at is null);
 create policy "admins read all products" on public.products for select to authenticated using (public.is_admin());
 create policy "admins insert products" on public.products for insert to authenticated with check (public.is_admin());
 create policy "admins update products" on public.products for update to authenticated using (public.is_admin()) with check (public.is_admin());
-create policy "admins delete products" on public.products for delete to authenticated using (public.is_admin());
 
 create policy "public reads images of public products" on public.product_images for select to anon, authenticated using (exists(select 1 from public.products p where p.id=product_id and p.published and p.active and p.archived_at is null));
 create policy "admins manage product images" on public.product_images for all to authenticated using (public.is_admin()) with check (public.is_admin());

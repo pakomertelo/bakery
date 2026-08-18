@@ -7,7 +7,7 @@ const password = process.argv[3] ?? process.env.LOCAL_ADMIN_PASSWORD
 
 if (!url || !serviceRoleKey || !email || !password) {
   console.error(
-    'Uso: npm run admin:create-local -- admin@example.test "contraseña-local" (requiere SUPABASE_URL/VITE_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY).',
+    'Configura LOCAL_ADMIN_EMAIL, LOCAL_ADMIN_PASSWORD, SUPABASE_URL/VITE_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY en .env.local; después ejecuta npm run admin:create-local.',
   )
   process.exit(1)
 }

@@ -12,10 +12,12 @@ Todas las tablas de negocio de `public` tienen RLS. Los grants y políticas apli
 
 - `anon` solo lee settings, catálogo activo/publicado y la función de disponibilidad segura;
 - `authenticated` no-admin conserva el acceso público, pero no ve pedidos ni obtiene escrituras administrativas;
-- admin activo gestiona catálogo, configuración, disponibilidad, pedidos y metadata de imágenes;
+- admin activo gestiona catálogo mediante publicación/activación/archivado, inicializa o actualiza la configuración singleton y gestiona disponibilidad, pedidos y metadata de imágenes;
 - historial de estados y eventos de email son auditoría de solo lectura para admin;
 - `admin_profiles` no admite escrituras desde clientes; un usuario solo puede consultar su propio perfil;
 - anon no tiene ningún privilegio sobre pedidos ni sus tablas relacionadas.
+
+No se concede DELETE de cliente sobre productos, categorías o `site_settings`. Los dos primeros conservan referencias e histórico mediante `active`, `published` y `archived_at`; settings se inicializa una vez y después se actualiza.
 
 `public.get_public_availability()` es una función deliberadamente limitada a id, fechas y mensaje público. Es `SECURITY DEFINER`, no acepta parámetros, fija un `search_path` vacío y tiene ejecución limitada a roles cliente. La tabla base queda bajo política admin, de modo que `reason_internal` no se concede a anon.
 
@@ -24,14 +26,16 @@ Todas las tablas de negocio de `public` tienen RLS. Los grants y políticas apli
 - `catalog-public` es público para servir imágenes, acepta JPEG/PNG/WebP hasta 8 MiB y solo un admin puede escribir o borrar.
 - `order-references-private` es privado, tiene los mismos MIME y límite de 8 MiB, y solo un admin activo puede listar o gestionar objetos durante esta fase.
 
+Los buckets se declaran en `supabase/config.toml` y se materializan con `supabase seed buckets`, integrado en `npm run supabase:reset`. Las políticas permanecen en migraciones SQL.
+
 No existe upload público de referencias; se añadirá mediante backend controlado en la Fase 4.
 
 ## Administrador local y secretos
 
-Tras `supabase start`, copia la URL y service role mostradas por `supabase status` a `.env.local`. Ejecuta:
+Tras `supabase start`, copia la URL y service role mostradas por `supabase status` a `.env.local`, define `LOCAL_ADMIN_EMAIL` y `LOCAL_ADMIN_PASSWORD`, y ejecuta:
 
 ```bash
-npm run admin:create-local -- admin@example.invalid 'elige-una-contraseña-local'
+npm run admin:create-local
 ```
 
 El script crea/confirma el usuario mediante la Admin API oficial y hace upsert del perfil activo. No insertes usuarios directamente en `auth`, no publiques `.env.local` y no uses el script contra servicios remotos.
@@ -44,4 +48,4 @@ npm run supabase:test
 npm run supabase:lint
 ```
 
-Los tests pgTAP verifican estructura, RLS, separación entre usuario normal/admin/inactivo, indisponibilidad de datos personales, ocultación de `reason_internal` y privacidad/escrituras de Storage.
+Los tests pgTAP verifican estructura, RLS, separación entre usuario normal/admin/inactivo, indisponibilidad de datos personales, ocultación de `reason_internal` y evaluación de las políticas de Storage. Los INSERT directos y transaccionales en `storage.objects` son tests unitarios de RLS: no prueban un upload HTTP ni el procesamiento real de la Storage API, que corresponde a la Fase 4.

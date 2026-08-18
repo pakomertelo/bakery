@@ -6,7 +6,7 @@ El frontend de Fase 0 continúa como interfaz provisional. Esta fase añade un b
 
 ## Flujo local y fuentes de verdad
 
-`supabase/config.toml` configura servicios y bloquea signup. Las migraciones SQL versionadas son la única definición del esquema; `supabase db reset` las aplica desde cero, crea buckets y carga `supabase/seed.sql`. Studio solo sirve para inspección. Los tipos del cliente se regeneran con `npm run supabase:types`.
+`supabase/config.toml` configura servicios, bloquea signup y declara los buckets locales. Las migraciones SQL versionadas son la única definición del esquema y las políticas. `npm run supabase:reset` ejecuta `supabase db reset` (migraciones y `supabase/seed.sql`) y después `supabase seed buckets`, sin pasos en Studio. Los tipos del cliente se regeneran de forma multiplataforma con `npm run supabase:types`.
 
 ## Modelo de datos
 
@@ -25,7 +25,9 @@ erDiagram
   AUTH_USERS ||--o| ADMIN_PROFILES : autoriza
 ```
 
-Las entidades principales usan UUID, timestamps técnicos son `timestamptz`, fechas solicitadas son `date` y dinero son céntimos enteros. Los enums cierran modos de precio, tipo/estado de pedido, fulfilment y rol admin. Constraints validan precios, moneda, cantidades, raciones, rangos, slugs, referencias y singleton de settings. FKs destructivas sobre histórico usan `restrict` o `set null`; catálogo utiliza archivado/despublicación.
+Las entidades principales usan UUID, timestamps técnicos son `timestamptz`, fechas solicitadas son `date` y dinero son céntimos enteros. Los enums cierran modos de precio, tipo/estado de pedido, fulfilment y rol admin. Constraints validan precios, moneda, cantidades, raciones, rangos, slugs, referencias y singleton de settings. FKs destructivas sobre histórico usan `restrict` o `set null`; productos y categorías no conceden DELETE al cliente administrativo y utilizan archivado/despublicación.
+
+El seed crea el singleton DEMO en local. En entornos donde no se aplica ese seed, un admin activo puede insertar la única fila `site_settings`; la PK booleana restringida a `true` impide una segunda configuración y no se concede DELETE normal.
 
 Un trigger reutilizable mantiene `updated_at`. Otro registra automáticamente el estado inicial y cada cambio de `orders.status`, usando `auth.uid()` cuando existe. Índices cubren navegación de catálogo y búsquedas habituales de pedidos/disponibilidad.
 
@@ -37,7 +39,7 @@ Todas las tablas públicas tienen RLS, complementada con grants mínimos. Anon s
 
 ## Storage
 
-La migración crea `catalog-public` (público para lectura) y `order-references-private` (privado). Ambos restringen MIME y tamaño; las políticas de escritura/gestión exigen `is_admin()`. La Fase 1 no abre uploads públicos ni URLs permanentes privadas.
+La configuración declarativa de la CLI crea `catalog-public` (público para lectura) y `order-references-private` (privado) mediante `supabase seed buckets`. Ambos restringen MIME y tamaño; las políticas SQL versionadas sobre `storage.objects` exigen `is_admin()` para escritura/gestión. La Fase 1 no abre uploads públicos ni URLs permanentes privadas.
 
 ## Frontend
 

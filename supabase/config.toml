@@ -43,6 +43,16 @@ port = 54324
 enabled = true
 file_size_limit = "50MiB"
 
+[storage.buckets.catalog-public]
+public = true
+file_size_limit = "8MiB"
+allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
+
+[storage.buckets.order-references-private]
+public = false
+file_size_limit = "8MiB"
+allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
+
 [auth]
 enabled = true
 site_url = "http://localhost:5173"
