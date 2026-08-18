@@ -1,6 +1,6 @@
 # Bakery
 
-Base local de una aplicación de repostería. La Fase 1 implementa el dominio PostgreSQL, Auth administrativa, RLS y Storage; la interfaz sigue siendo provisional y todavía no permite enviar solicitudes ni administrar contenido.
+Aplicación para un negocio de repostería. Las Fases 0 y 1 establecen la arquitectura, PostgreSQL, Auth administrativa, RLS y Storage. La Fase 2 incorpora la web pública y un catálogo conectado a Supabase; todavía no permite enviar solicitudes ni administrar contenido.
 
 ## Stack y requisitos
 
@@ -89,3 +89,7 @@ Las demás variables privadas de `.env.example` están reservadas para fases pos
 | `npm run admin:create-local`                                   | Crea/actualiza admin local.         |
 
 No hay proyecto remoto, staging, producción, Edge Functions públicas ni UI administrativa funcional en esta fase.
+
+## Web pública
+
+La web consulta mediante TanStack Query la configuración, categorías y catálogo protegidos por RLS. Incluye inicio, filtros de catálogo en la URL, ficha de producto, personalizados informativo, sobre nosotros, contacto y estados 404. Las imágenes se resuelven exclusivamente desde el bucket público `catalog-public`; `/solicitud` sigue siendo informativa y no escribe pedidos.

@@ -1,8 +1,8 @@
-# Arquitectura — Fase 1
+# Arquitectura — Fase 2
 
 ## Alcance
 
-El frontend de Fase 0 continúa como interfaz provisional. Esta fase añade un backend Supabase local reproducible (PostgreSQL, Auth, RLS y Storage), sin catálogo visual, creación pública de pedidos, panel funcional ni servicios remotos.
+Sobre el backend Supabase local reproducible de Fase 1, esta fase añade la web pública y el catálogo visual. No incluye creación pública de pedidos, panel funcional ni servicios remotos.
 
 ## Flujo local y fuentes de verdad
 
@@ -41,6 +41,10 @@ Todas las tablas públicas tienen RLS, complementada con grants mínimos. Anon s
 
 La configuración declarativa de la CLI crea `catalog-public` (público para lectura) y `order-references-private` (privado) mediante `supabase seed buckets`. Ambos restringen MIME y tamaño; las políticas SQL versionadas sobre `storage.objects` exigen `is_admin()` para escritura/gestión. La Fase 1 no abre uploads públicos ni URLs permanentes privadas.
 
-## Frontend
+## Frontend público
 
-`src/lib/supabase.ts` solo consume URL y clave `sb_publishable_...` públicas y utiliza `Database` desde `src/types/database.types.ts`. Las claves `sb_secret_...`/service role nunca entran en el bundle. Las rutas y layouts continúan siendo placeholders de Fase 0; la UI funcional corresponde a fases posteriores.
+`src/lib/supabase.ts` solo consume URL y clave `sb_publishable_...` públicas y utiliza `Database` desde `src/types/database.types.ts`. Las claves secretas/service role nunca entran en el bundle. `features/site` y `features/catalog` separan queries, modelos, hooks y presentación. TanStack Query comparte caché para settings, categorías, listados, destacados y ficha por slug.
+
+Las consultas descansan en RLS para limitar el catálogo público. El filtro de categoría vive en `?categoria=slug`; la ficha agrega imágenes, variantes activas, sabores y alérgenos sin consultas N+1 por elemento. Un helper único obtiene URLs de `catalog-public`. Los estados sin configuración, carga, error, vacío, sin imagen y 404 tienen presentación pública controlada.
+
+El layout mobile-first comparte identidad y datos reales de `site_settings`, navegación accesible y footer. `/personalizado` y `/solicitud` son únicamente informativas: no hay formularios, inserts, uploads privados ni lógica de fases posteriores.

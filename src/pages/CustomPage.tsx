@@ -1,4 +1,5 @@
-import { PagePlaceholder } from '../components/PagePlaceholder'
-export function CustomPage() {
-  return <PagePlaceholder title="Producto personalizado" description="El formulario definitivo todavía no está implementado." />
-}
+import { Link } from 'react-router-dom'
+import { CatalogImage } from '../components/CatalogImage'
+import { ErrorState, LoadingState } from '../components/ui/AsyncState'
+import { useSiteSettings } from '../features/site/hooks'
+export function CustomPage(){const q=useSiteSettings();if(q.isLoading)return <LoadingState/>;if(q.isError||!q.data)return <div className="page-shell py-16"><ErrorState/></div>;const s=q.data;return <div className="page-shell py-12 sm:py-20"><div className="grid items-center gap-10 lg:grid-cols-2"><div><p className="eyebrow">Una creación única</p><h1 className="page-title">{s.custom_orders_title}</h1>{s.custom_orders_description&&<p className="mt-6 text-lg leading-8 text-stone-700">{s.custom_orders_description}</p>}<div className="mt-8 rounded-2xl bg-rose-50 p-6 leading-7 text-rose-950">Cuéntanos tu idea en una solicitud. El envío no la confirma automáticamente: contactaremos contigo para revisar disponibilidad, detalles y precio.</div><Link className="button-secondary mt-7" to="/catalogo">Inspirarte en el catálogo</Link></div><div className="aspect-square overflow-hidden rounded-[2.5rem]"><CatalogImage path={s.hero_image} alt="Productos personalizados" className="h-full w-full object-cover" /></div></div></div>}

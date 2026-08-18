@@ -10,6 +10,9 @@ import { CustomPage } from '../pages/CustomPage'
 import { HomePage } from '../pages/HomePage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { AboutPage } from '../pages/AboutPage'
+import { ProductPage } from '../pages/ProductPage'
+import { RequestInfoPage } from '../pages/RequestInfoPage'
+import { LegalPlaceholderPage } from '../pages/LegalPlaceholderPage'
 
 export const router = createBrowserRouter([
   {
@@ -17,9 +20,15 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/catalogo', element: <CatalogPage /> },
+      { path: '/catalogo/:slug', element: <ProductPage /> },
+      { path: '/solicitud', element: <RequestInfoPage /> },
       { path: '/personalizado', element: <CustomPage /> },
       { path: '/sobre-nosotros', element: <AboutPage /> },
       { path: '/contacto', element: <ContactPage /> },
+      { path: '/aviso-legal', element: <LegalPlaceholderPage title="Aviso legal" /> },
+      { path: '/privacidad', element: <LegalPlaceholderPage title="Privacidad" /> },
+      { path: '/cookies', element: <LegalPlaceholderPage title="Cookies" /> },
+      { path: '/condiciones', element: <LegalPlaceholderPage title="Condiciones" /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
