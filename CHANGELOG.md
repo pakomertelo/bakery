@@ -6,6 +6,13 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo, sigu
 
 ### Added
 
+- Esquema PostgreSQL inicial versionado con dominio de catálogo, configuración, disponibilidad, pedidos, auditoría y eventos de email.
+- Autorización administrativa explícita, RLS/grants de mínimo privilegio y signup público deshabilitado.
+- Buckets reproducibles de catálogo público y referencias privadas con políticas admin y límites de archivo.
+- Seed DEMO determinista, script protegido de creación de admin local y suite pgTAP estructural/de seguridad.
+- Tipos TypeScript del esquema y cliente Supabase tipado, además de documentación operativa y de seguridad.
+- Cierre verificado de la Fase 0 con `package-lock.json` versionado.
+
 - Base React, TypeScript estricto, Vite y Tailwind CSS.
 - Routing público y administrativo provisional con manejo de páginas no encontradas.
 - Integración base de TanStack Query y cliente público de Supabase.

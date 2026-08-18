@@ -14,7 +14,12 @@
     "format:check": "prettier --check .",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
-    "supabase:status": "supabase status"
+    "supabase:status": "supabase status",
+    "supabase:reset": "supabase db reset",
+    "supabase:test": "supabase test db",
+    "supabase:types": "tmp=$(mktemp) && supabase gen types typescript --local --schema public > \"$tmp\" && mv \"$tmp\" src/types/database.types.ts",
+    "supabase:lint": "supabase db lint --local --level warning",
+    "admin:create-local": "node --env-file=.env.local scripts/create-local-admin.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",
