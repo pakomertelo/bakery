@@ -2,7 +2,7 @@
 
 | Fase | Estado | Alcance |
 | --- | --- | --- |
-| Fase 0 — Inicialización y arquitectura | **done** | Base local, routing, layouts, calidad, Supabase local y documentación verificados. |
+| Fase 0 — Inicialización y arquitectura | **in_progress** | Implementación completa; verificación bloqueada por el acceso al registro npm del entorno. |
 | Fase 1 — Base de datos, Auth y seguridad | **pending** | Sin comenzar. |
 | Fase 2 — Web pública y catálogo | **pending** | Sin comenzar. |
 | Fase 3 — Solicitudes de catálogo | **pending** | Sin comenzar. |
@@ -14,4 +14,4 @@
 | Fase 9 — Staging | **pending** | Sin comenzar. |
 | Fase 10 — Producción | **pending** | Sin comenzar. |
 
-La Fase 0 está cerrada. Este documento no implica que se hayan adelantado criterios de fases posteriores.
+La Fase 0 permanecerá como `in_progress` hasta poder instalar dependencias y ejecutar satisfactoriamente todos los checks obligatorios. Este documento no implica que se hayan adelantado criterios de fases posteriores.

@@ -44,6 +44,7 @@ TanStack Query se configura en un único `QueryClient`. No existe estado remoto 
 ## Formularios y validación
 
 React Hook Form y Zod están instalados, pero no se ha creado ningún formulario ficticio solo para ejercitarlos. Los futuros esquemas se ubicarán fuera de componentes visuales cuando aparezca el primer caso real.
+React Hook Form, su adaptador oficial para resolvers y Zod están instalados, pero no se ha creado ningún formulario ficticio solo para ejercitarlos. Los futuros esquemas se ubicarán fuera de componentes visuales cuando aparezca el primer caso real.
 
 ## Decisiones
 

@@ -12,7 +12,3 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo, sigu
 - Configuración local de Supabase para PostgreSQL, Auth, Storage y Edge Functions.
 - Herramientas de lint, formato, typecheck, tests unitarios y build.
 - Documentación operativa, arquitectura y seguimiento de fases.
-
-### Changed
-
-- Fase 0 cerrada formalmente tras verificar el entorno local, los checks de calidad y la configuración local de Supabase.
