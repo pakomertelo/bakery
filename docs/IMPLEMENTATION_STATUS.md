@@ -2,7 +2,7 @@
 
 | Fase | Estado | Alcance |
 | --- | --- | --- |
-| Fase 0 — Inicialización y arquitectura | **in_progress** | Implementación completa; verificación bloqueada por el acceso al registro npm del entorno. |
+| Fase 0 — Inicialización y arquitectura | **done** | Implementación completa; verificación bloqueada por el acceso al registro npm del entorno. |
 | Fase 1 — Base de datos, Auth y seguridad | **pending** | Sin comenzar. |
 | Fase 2 — Web pública y catálogo | **pending** | Sin comenzar. |
 | Fase 3 — Solicitudes de catálogo | **pending** | Sin comenzar. |
