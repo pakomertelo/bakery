@@ -4,7 +4,7 @@
 | -------------------------------------------------- | --------------- | --------------------------------------------------------------------- |
 | Fase 0 — Inicialización y arquitectura             | **done**        | Implementación completa y verificada; `package-lock.json` versionado. |
 | Fase 1 — Base de datos, Auth y seguridad           | **done**        | Implementación completa y verificada localmente.                      |
-| Fase 2 — Web pública y catálogo                    | **in_progress** | Implementación en curso.                                              |
+| Fase 2 — Web pública y catálogo                    | **donde**       | Implementación completa y verificada localmente.                      |
 | Fase 3 — Solicitudes de catálogo                   | **pending**     | Sin comenzar.                                                         |
 | Fase 4 — Personalizados                            | **pending**     | Sin comenzar.                                                         |
 | Fase 5 — Admin                                     | **pending**     | Sin comenzar.                                                         |
