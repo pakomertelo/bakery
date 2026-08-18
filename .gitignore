@@ -1,0 +1,27 @@
+node_modules/
+dist/
+coverage/
+
+# Environment and secrets (the documented template remains tracked)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials/
+secrets/
+
+# Supabase local runtime
+.branches/
+.temp/
+supabase/.temp/
+
+# Editors, operating systems and temporary output
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+*.tmp
+*.swp
+*~
