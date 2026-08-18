@@ -43,4 +43,4 @@ La configuración declarativa de la CLI crea `catalog-public` (público para lec
 
 ## Frontend
 
-`src/lib/supabase.ts` solo consume URL y anon key públicas y utiliza `Database` desde `src/types/database.types.ts`. La service role nunca entra en el bundle. Las rutas y layouts continúan siendo placeholders de Fase 0; la UI funcional corresponde a fases posteriores.
+`src/lib/supabase.ts` solo consume URL y clave `sb_publishable_...` públicas y utiliza `Database` desde `src/types/database.types.ts`. Las claves `sb_secret_...`/service role nunca entran en el bundle. Las rutas y layouts continúan siendo placeholders de Fase 0; la UI funcional corresponde a fases posteriores.

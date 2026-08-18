@@ -6,6 +6,7 @@ insert into auth.users(instance_id,id,aud,role,email,encrypted_password,email_co
 ('00000000-0000-0000-0000-000000000000','aaaaaaaa-0000-4000-8000-000000000002','authenticated','authenticated','admin@example.invalid','',now(),'{}','{}',now(),now()),
 ('00000000-0000-0000-0000-000000000000','aaaaaaaa-0000-4000-8000-000000000003','authenticated','authenticated','inactive@example.invalid','',now(),'{}','{}',now(),now());
 insert into public.admin_profiles(user_id,active) values ('aaaaaaaa-0000-4000-8000-000000000002',true),('aaaaaaaa-0000-4000-8000-000000000003',false);
+select is((select public from storage.buckets where id='order-references-private'),false,'order references bucket is private');
 
 set local role anon;
 select is((select count(*)::integer from public.categories),3,'anon sees active categories');
@@ -23,7 +24,6 @@ select ok(not has_table_privilege('anon','public.custom_order_details','select')
 select ok(not has_table_privilege('anon','public.order_reference_images','select'),'anon cannot select reference metadata');
 select ok(not has_table_privilege('anon','public.admin_profiles','select'),'anon cannot select admin profiles');
 select ok(not has_table_privilege('anon','public.email_events','select'),'anon cannot select email events');
-select is((select public from storage.buckets where id='order-references-private'),false,'order references bucket is private');
 select is((select count(*)::integer from storage.objects where bucket_id='order-references-private'),0,'anon cannot list private objects');
 select throws_ok($$insert into storage.objects(bucket_id,name) values ('catalog-public','anon.webp')$$,'42501',null,'anon cannot upload catalog objects');
 select throws_ok($$insert into storage.objects(bucket_id,name) values ('order-references-private','anon.webp')$$,'42501',null,'anon cannot upload private objects');

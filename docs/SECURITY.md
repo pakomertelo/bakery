@@ -4,7 +4,7 @@
 
 Supabase distingue `anon`, `authenticated` y `service_role`. Una sesión `authenticated` no es administrativa: `public.is_admin()` solo devuelve verdadero cuando `auth.uid()` corresponde a un `admin_profiles` activo con rol `admin`. La función es `SECURITY DEFINER`, no acepta parámetros, fija un `search_path` vacío y solo concede ejecución a `authenticated`.
 
-La service role omite RLS y queda reservada para procesos backend. En esta fase solo la utiliza `scripts/create-local-admin.mjs`, que aborta si la URL no apunta a `localhost` o `127.0.0.1`. Nunca debe utilizarse en `src`, una variable `VITE_*`, logs o Git.
+La service role omite RLS y queda reservada para procesos backend. En esta fase solo la utiliza `scripts/create-local-admin.mjs`, que aborta si la URL no apunta a `localhost` o `127.0.0.1`. `VITE_SUPABASE_ANON_KEY` solo puede contener la clave pública `sb_publishable_...`; una clave `sb_secret_...`/service role solo puede ir en `SUPABASE_SERVICE_ROLE_KEY`. Nunca debe utilizarse en `src`, una variable `VITE_*`, logs o Git.
 
 ## Base de datos y RLS
 

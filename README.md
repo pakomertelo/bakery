@@ -19,7 +19,7 @@ npm run supabase:status
 cp .env.example .env.local
 ```
 
-Copia de `supabase:status` a `.env.local` la API URL, anon key y, solo para el script local, service role. Nunca uses la service role como `VITE_*`.
+Copia de `supabase:status` a `.env.local` la API URL y la clave pública `sb_publishable_...`. Usa `sb_publishable_...` exclusivamente como `VITE_SUPABASE_ANON_KEY`: nunca coloques una clave `sb_secret_...` ni una service role en ninguna variable `VITE_*`. La clave `sb_secret_...`/service role local solo pertenece a `SUPABASE_SERVICE_ROLE_KEY`, consumida por scripts locales o backend.
 
 Reconstruye la base desde migraciones, carga automáticamente `supabase/seed.sql` y aplica después la configuración declarativa de buckets:
 
@@ -60,14 +60,14 @@ En un entorno sin seed DEMO, un admin activo puede insertar la única fila de `s
 
 ## Variables
 
-| Variable                                    | Exposición            | Uso                                  |
-| ------------------------------------------- | --------------------- | ------------------------------------ |
-| `VITE_SUPABASE_URL`                         | Pública               | API de Supabase local.               |
-| `VITE_SUPABASE_ANON_KEY`                    | Pública               | Anon key protegida por RLS.          |
-| `VITE_SITE_URL`                             | Pública               | URL del frontend.                    |
-| `SUPABASE_URL`                              | Privada local         | URL alternativa para crear admin.    |
-| `SUPABASE_SERVICE_ROLE_KEY`                 | Secreto local/backend | Solo script Admin API local.         |
-| `LOCAL_ADMIN_EMAIL`, `LOCAL_ADMIN_PASSWORD` | Secretos locales      | Vía recomendada para crear el admin. |
+| Variable                                    | Exposición            | Uso                                                |
+| ------------------------------------------- | --------------------- | -------------------------------------------------- |
+| `VITE_SUPABASE_URL`                         | Pública               | API de Supabase local.                             |
+| `VITE_SUPABASE_ANON_KEY`                    | Pública               | Clave `sb_publishable_...`; nunca `sb_secret_...`. |
+| `VITE_SITE_URL`                             | Pública               | URL del frontend.                                  |
+| `SUPABASE_URL`                              | Privada local         | URL alternativa para crear admin.                  |
+| `SUPABASE_SERVICE_ROLE_KEY`                 | Secreto local/backend | `sb_secret_...`/service role; nunca `VITE_*`.      |
+| `LOCAL_ADMIN_EMAIL`, `LOCAL_ADMIN_PASSWORD` | Secretos locales      | Vía recomendada para crear el admin.               |
 
 Las demás variables privadas de `.env.example` están reservadas para fases posteriores y aún no se usan.
 

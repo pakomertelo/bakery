@@ -1,10 +1,10 @@
 import {
   closeSync,
-  copyFileSync,
   mkdtempSync,
   openSync,
+  readFileSync,
   rmSync,
-  statSync,
+  writeFileSync,
 } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -29,14 +29,18 @@ try {
     process.exitCode = 1
   } else if (result.status !== 0) {
     process.exitCode = result.status ?? 1
-  } else if (statSync(temporaryFile).size === 0) {
-    console.error(
-      'Supabase CLI terminó sin generar tipos; se conserva el archivo actual.',
-    )
-    process.exitCode = 1
   } else {
-    copyFileSync(temporaryFile, targetFile)
-    console.log(`Tipos Supabase actualizados en ${targetFile}.`)
+    const generatedTypes = readFileSync(temporaryFile, 'utf8').trimEnd()
+
+    if (!generatedTypes) {
+      console.error(
+        'Supabase CLI terminó sin generar tipos; se conserva el archivo actual.',
+      )
+      process.exitCode = 1
+    } else {
+      writeFileSync(targetFile, `${generatedTypes}\n`, 'utf8')
+      console.log(`Tipos Supabase actualizados en ${targetFile}.`)
+    }
   }
 } finally {
   try {

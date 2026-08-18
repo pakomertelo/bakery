@@ -16,6 +16,7 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo, sigu
 ### Changed
 
 - Buckets locales declarados mediante Supabase CLI, generación de tipos multiplataforma y endurecimiento del catálogo/settings sin DELETE físico normal.
+- Tests pgTAP y frontend deterministas, salida de tipos normalizada, exclusión ESLint del archivo generado y configuración `local_smtp` moderna.
 
 - Base React, TypeScript estricto, Vite y Tailwind CSS.
 - Routing público y administrativo provisional con manejo de páginas no encontradas.
