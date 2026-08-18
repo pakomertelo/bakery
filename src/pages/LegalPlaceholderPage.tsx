@@ -1,0 +1,1 @@
+export function LegalPlaceholderPage({title}:{title:string}){return <div className="page-shell py-16"><p className="eyebrow">Información legal</p><h1 className="page-title">{title}</h1><p className="mt-6 max-w-2xl leading-7 text-stone-600">Este contenido está pendiente de completarse con los datos jurídicos definitivos del negocio.</p></div>}

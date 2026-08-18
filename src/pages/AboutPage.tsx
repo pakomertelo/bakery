@@ -1,4 +1,4 @@
-import { PagePlaceholder } from '../components/PagePlaceholder'
-export function AboutPage() {
-  return <PagePlaceholder title="Sobre nosotros" description="Contenido provisional pendiente de la fase correspondiente." />
-}
+import { CatalogImage } from '../components/CatalogImage'
+import { ErrorState, LoadingState } from '../components/ui/AsyncState'
+import { useSiteSettings } from '../features/site/hooks'
+export function AboutPage() { const query=useSiteSettings(); if(query.isLoading)return <LoadingState/>; if(query.isError||!query.data)return <div className="page-shell py-16"><ErrorState/></div>; const s=query.data; return <div className="page-shell py-12 sm:py-20"><div className="grid items-center gap-10 lg:grid-cols-2"><div><p className="eyebrow">{s.business_name}</p><h1 className="page-title">{s.about_title || 'Sobre nosotros'}</h1><p className="mt-6 whitespace-pre-line text-lg leading-8 text-stone-700">{s.about_description || s.business_description}</p></div><div className="aspect-[4/3] overflow-hidden rounded-[2.5rem]"><CatalogImage path={s.about_image} alt={s.about_title || s.business_name} className="h-full w-full object-cover" /></div></div></div> }
