@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCategories, useFeaturedProducts } from '../features/catalog/hooks'
 import { useSiteSettings } from '../features/site/hooks'
 import type { SiteSettings } from '../features/site/types'
+import { queryResult } from '../test/queryResult'
 import { HomePage } from './HomePage'
 
 vi.mock('../features/catalog/hooks')
@@ -35,21 +36,15 @@ const closedSettings: SiteSettings = {
 
 describe('HomePage', () => {
   beforeEach(() => {
-    vi.mocked(useSiteSettings).mockReturnValue({
-      data: closedSettings,
-      isLoading: false,
-      isError: false,
-    } as ReturnType<typeof useSiteSettings>)
-    vi.mocked(useFeaturedProducts).mockReturnValue({
-      data: [],
-      isLoading: false,
-      isError: false,
-    } as ReturnType<typeof useFeaturedProducts>)
-    vi.mocked(useCategories).mockReturnValue({
-      data: [],
-      isLoading: false,
-      isError: false,
-    } as ReturnType<typeof useCategories>)
+    vi.mocked(useSiteSettings).mockReturnValue(
+      queryResult<ReturnType<typeof useSiteSettings>>(closedSettings),
+    )
+    vi.mocked(useFeaturedProducts).mockReturnValue(
+      queryResult<ReturnType<typeof useFeaturedProducts>>([]),
+    )
+    vi.mocked(useCategories).mockReturnValue(
+      queryResult<ReturnType<typeof useCategories>>([]),
+    )
   })
 
   it('muestra el cierre configurado sin ocultar el acceso al catálogo', () => {
