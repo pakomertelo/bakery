@@ -6,12 +6,17 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo, sigu
 
 ### Added
 
+- Web pública mobile-first con inicio, navegación compartida, footer, sobre nosotros, contacto, personalizados informativo y 404 coherente.
+- Catálogo Supabase con filtro persistente en URL, tarjetas reutilizables, ficha por slug, galería accesible, variantes, raciones, sabores y alérgenos.
+- Capa pública de queries TanStack Query, helper central de Storage, estados de carga/error/vacío y tests de precio y producto.
+
 - Esquema PostgreSQL inicial versionado con dominio de catálogo, configuración, disponibilidad, pedidos, auditoría y eventos de email.
 - Autorización administrativa explícita, RLS/grants de mínimo privilegio y signup público deshabilitado.
 - Buckets reproducibles de catálogo público y referencias privadas con políticas admin y límites de archivo.
 - Seed DEMO determinista, script protegido de creación de admin local y suite pgTAP estructural/de seguridad.
 - Tipos TypeScript del esquema y cliente Supabase tipado, además de documentación operativa y de seguridad.
 - Cierre verificado de la Fase 0 con `package-lock.json` versionado.
+- Cierre formal de la Fase 1 tras verificar reconstrucción local, tipos, pgTAP, lint, tests y build.
 
 ### Changed
 
