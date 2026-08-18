@@ -1,6 +1,12 @@
 begin;
-select plan(33);
+select plan(39);
 -- Direct storage.objects writes below unit-test RLS only; Storage API uploads are Phase 4 coverage.
+select ok(has_table_privilege('service_role','public.admin_profiles','SELECT') and has_table_privilege('service_role','public.admin_profiles','INSERT') and has_table_privilege('service_role','public.admin_profiles','UPDATE'),'service_role provisions admin profiles');
+select ok(has_table_privilege('service_role','public.orders','SELECT') and has_table_privilege('service_role','public.orders','INSERT') and has_table_privilege('service_role','public.orders','UPDATE'),'service_role manages orders without deleting history');
+select ok(has_table_privilege('service_role','public.order_items','SELECT') and has_table_privilege('service_role','public.order_items','INSERT') and has_table_privilege('service_role','public.order_items','UPDATE') and has_table_privilege('service_role','public.order_items','DELETE'),'service_role manages order items');
+select ok(has_table_privilege('service_role','public.custom_order_details','SELECT') and has_table_privilege('service_role','public.custom_order_details','INSERT') and has_table_privilege('service_role','public.custom_order_details','UPDATE') and has_table_privilege('service_role','public.custom_order_details','DELETE'),'service_role manages custom order details');
+select ok(has_table_privilege('service_role','public.order_reference_images','SELECT') and has_table_privilege('service_role','public.order_reference_images','INSERT') and has_table_privilege('service_role','public.order_reference_images','UPDATE') and has_table_privilege('service_role','public.order_reference_images','DELETE'),'service_role manages order reference metadata');
+select ok(has_table_privilege('service_role','public.email_events','SELECT') and has_table_privilege('service_role','public.email_events','INSERT') and has_table_privilege('service_role','public.email_events','UPDATE'),'service_role writes email events');
 insert into auth.users(instance_id,id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at) values
 ('00000000-0000-0000-0000-000000000000','aaaaaaaa-0000-4000-8000-000000000001','authenticated','authenticated','normal@example.invalid','',now(),'{}','{}',now(),now()),
 ('00000000-0000-0000-0000-000000000000','aaaaaaaa-0000-4000-8000-000000000002','authenticated','authenticated','admin@example.invalid','',now(),'{}','{}',now(),now()),

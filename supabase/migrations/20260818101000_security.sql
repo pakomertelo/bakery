@@ -38,6 +38,11 @@ grant select, insert, update on public.site_settings, public.categories, public.
 grant select, insert, update, delete on public.product_images, public.product_variants, public.flavours, public.product_flavours, public.allergens, public.product_allergens, public.availability_blocks, public.order_items, public.custom_order_details, public.order_reference_images to authenticated;
 grant select on public.order_status_history, public.email_events to authenticated;
 
+-- Backend-only access. RLS bypass does not replace PostgreSQL table privileges.
+grant select on public.admin_profiles, public.site_settings, public.categories, public.products, public.product_images, public.product_variants, public.flavours, public.product_flavours, public.allergens, public.product_allergens, public.availability_blocks, public.orders, public.order_items, public.custom_order_details, public.order_reference_images, public.order_status_history, public.email_events to service_role;
+grant insert, update on public.admin_profiles, public.orders, public.email_events to service_role;
+grant insert, update, delete on public.site_settings, public.categories, public.products, public.product_images, public.product_variants, public.flavours, public.product_flavours, public.allergens, public.product_allergens, public.availability_blocks, public.order_items, public.custom_order_details, public.order_reference_images to service_role;
+
 create policy "public reads singleton settings" on public.site_settings for select to anon, authenticated using (true);
 create policy "admins initialize settings" on public.site_settings for insert to authenticated with check (public.is_admin());
 create policy "admins update settings" on public.site_settings for update to authenticated using (public.is_admin()) with check (public.is_admin());

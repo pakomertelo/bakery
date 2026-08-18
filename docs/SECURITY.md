@@ -6,6 +6,8 @@ Supabase distingue `anon`, `authenticated` y `service_role`. Una sesión `authen
 
 La service role omite RLS y queda reservada para procesos backend. En esta fase solo la utiliza `scripts/create-local-admin.mjs`, que aborta si la URL no apunta a `localhost` o `127.0.0.1`. `VITE_SUPABASE_ANON_KEY` solo puede contener la clave pública `sb_publishable_...`; una clave `sb_secret_...`/service role solo puede ir en `SUPABASE_SERVICE_ROLE_KEY`. Nunca debe utilizarse en `src`, una variable `VITE_*`, logs o Git.
 
+El rol `service_role` recibe grants SQL explícitos, además de su bypass de RLS: lectura de las tablas de negocio; creación/actualización de perfiles admin, pedidos y eventos de email; y CRUD de catálogo, settings, disponibilidad y detalles asociados a pedidos. No recibe ejecución de `is_admin()` porque los procesos backend no la necesitan, ni escritura arbitraria sobre `order_status_history`, que mantiene el trigger de auditoría.
+
 ## Base de datos y RLS
 
 Todas las tablas de negocio de `public` tienen RLS. Los grants y políticas aplican defensa en profundidad:
